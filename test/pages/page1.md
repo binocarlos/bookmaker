@@ -1,5 +1,6 @@
 ---
-hello: world
+title: page1
+option: A
 ---
 
-123
+This is page 1

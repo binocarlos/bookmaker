@@ -27,8 +27,9 @@ var PageMaker = require('pagemaker');
 // turns page13.md into 13
 function pagenumber_extractor(filename){
 	filename = filename.replace(/\.\w+$/, '');
-	filename = filename.replace(/\D/, '');
+	filename = filename.replace(/\D/g, '');
 	var ret = parseInt(filename);
+
 	if(isNaN(ret)){
 		return null;
 	}
@@ -105,10 +106,12 @@ BookMaker.prototype.extract = function(done){
 						nextfile();
 					})
 				}, function(error){
+					if(error){
+						next(error);
+						return;
+					}
 					pages.sort(filename_sorter);
-					console.log('-------------------------------------------');
-					console.dir(pages);
-					next();
+					next(null, pages);
 				})
 			})
 		},
@@ -116,9 +119,14 @@ BookMaker.prototype.extract = function(done){
 			self.read_data(next);
 		}
 	}, function(error, values){
-		console.log('-------------------------------------------');
-		console.dir(values);
-		done(error, values);
+		
+		if(error){
+			done(error);
+			return;
+		}
+		var doc = values.data || {};
+		doc.pages = values.pages || [];
+		done(error, doc);
 
 	})
 

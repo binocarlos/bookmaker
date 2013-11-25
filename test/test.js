@@ -16,8 +16,13 @@ describe('BookMaker', function(){
     var maker = get_maker();
 
     maker.extract(function(error, data){
-      console.log('-------------------------------------------');
-      console.dir(data);
+
+      data.test.should.equal('yes');
+      data.fruit.should.equal('apples');
+      data.pages.length.should.equal(3);
+      data.pages[0].body.should.equal("<p>This is page 1</p>\n");
+      data.pages[1].option.should.equal('B');
+      data.pages[2].filename.should.equal('page3.md');
       done();
     })
 
