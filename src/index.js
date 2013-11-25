@@ -58,7 +58,50 @@ util.inherits(BookMaker, EventEmitter);
 module.exports = BookMaker;
 
 BookMaker.prototype.convert = function(done){
+	var self = this;
+	async.parallel({
+		template:function(next){
+			self.read_template(next);
+		},
+		data:function(next){
+			self.extract(next);
+		}
+	}, function(error, values){
+		if(error){
+			console.error(error);
+			process.exit();
+		}
+		
+		if(!values.template){
+			console.error('no template found');
+			process.exit();
+		}
 
+		if(!values.data){
+			console.error('no data found');
+			process.exit();
+		}
+
+		var output = Mustache.render(values.template, values.data);
+
+		self.write_output(output, function(){
+			done(null, output);
+		})
+	})
+}
+
+BookMaker.prototype.write_output = function(content, done){
+	if(this.options.outfile){
+		if(this.options.outfile=='silent'){
+			done();
+		}
+		else{
+			fs.writeFile(this.options.outfile, content, 'utf8', done);	
+		}
+	}
+	else{
+		process.stdout.write(content);
+	}
 }
 
 BookMaker.prototype.get_page_data = function(path, done){
@@ -67,6 +110,21 @@ BookMaker.prototype.get_page_data = function(path, done){
   });
 
   page.extract(done);
+}
+
+BookMaker.prototype.read_template = function(done){
+	var template = this.options.template;
+
+	if(!template){
+		done();
+		return;
+	}
+
+  if(template.charAt(0)!='/'){
+    template = path.normalize(process.cwd() + '/' + template);
+  }
+
+  fs.readFile(template, 'utf8', done);
 }
 
 BookMaker.prototype.read_data = function(done){
