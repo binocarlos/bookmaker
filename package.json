@@ -1,0 +1,32 @@
+{
+  "name": "bookmaker",
+  "version": "0.0.2",
+  "description": "Create books from a folder of markdown files",
+  "main": "src/index.js",
+  "preferGlobal": "true",
+  "bin": {
+    "bookmaker": "bin/bookmaker.js"
+  },
+  "dependencies": {
+    "pagemaker": "~0.1.1",
+    "mustache": "~0.7.3",
+    "async": "~0.2.9"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0",
+    "should": "~1.2.2"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binocarlos/bookmaker.git"
+  },
+  "keywords": [],
+  "author": "Kai Davenport",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/binocarlos/bookmaker/issues"
+  }
+}
