@@ -18,11 +18,31 @@
 
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
-var fs = require('fs');
 var Mustache = require('Mustache');
 var async = require('async');
 var path = require('path');
 var PageMaker = require('pagemaker');
+var wrench = require('wrench');
+var fs = require("node-fs");
+
+function mergeDirs(f1, f2) {
+  var file, files, stats, _i, _len, _results;
+  files = fs.readdirSync(f1);
+  _results = [];
+  for (_i = 0, _len = files.length; _i < _len; _i++) {
+    file = files[_i];
+    stats = fs.lstatSync("" + f1 + "/" + file);
+    if (stats.isDirectory()) {
+    	mergeDirs("" + f1 + "/" + file, "" + f2 + "/" + file)
+    } else {
+      if (!fs.existsSync("" + f2 + "/" + file)) {
+        fs.mkdirSync(("" + f2 + "/" + file).split("/").slice(0, -1).join("/"), 0x1ed, true);
+        fs.writeFileSync("" + f2 + "/" + file, fs.readFileSync("" + f1 + "/" + file));
+      }
+    }
+  }
+};
+
 
 // turns page13.md into 13
 function pagenumber_extractor(filename){
@@ -90,13 +110,46 @@ BookMaker.prototype.convert = function(done){
 	})
 }
 
+
+BookMaker.prototype.merge = function(done){
+	var self = this;
+
+	if(!this.options.output){
+		console.error('please give an output folder');
+		process.exit();
+	}
+
+	if(!fs.existsSync(this.options.folder)){
+		console.error('data folder not found: ' + this.options.folder);
+		process.exit();
+	}
+
+	if(!fs.existsSync(this.options.template)){
+		console.error('template folder not found: ' + this.options.template);
+		process.exit();
+	}
+
+	wrench.rmdirSyncRecursive(this.options.output, true);
+	wrench.mkdirSyncRecursive(this.options.output, 0777);
+	mergeDirs(this.options.template, this.options.output);
+	mergeDirs(this.options.folder, this.options.output);
+
+	var files = fs.readdirSync(this.options.output);
+
+	(files || []).forEach(function(file){
+		if(file.match(/\.md$/)){
+			fs.unlinkSync(self.options.output + '/' + file);
+		}
+	})
+}
+
 BookMaker.prototype.write_output = function(content, done){
-	if(this.options.outfile){
-		if(this.options.outfile=='silent'){
+	if(this.options.output){
+		if(this.options.output=='silent'){
 			done();
 		}
 		else{
-			fs.writeFile(this.options.outfile, content, 'utf8', done);	
+			fs.writeFile(this.options.output, content, 'utf8', done);	
 		}
 	}
 	else{

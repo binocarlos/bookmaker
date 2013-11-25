@@ -1,19 +1,16 @@
 var BookMaker = require('../src');
 var fs = require('fs');
-
-function get_maker(){
-  return new BookMaker({
-    folder:__dirname + '/pages',
-    outfile:'silent',
-    datafile:__dirname + '/test.json',
-    template:__dirname + '/template.html'
-  });
-}
+var wrench = require('wrench');
 
 describe('BookMaker', function(){
 
   it('should extract data', function(done) {
-    var maker = get_maker();
+    var maker = new BookMaker({
+      folder:__dirname + '/pages',
+      output:'silent',
+      datafile:__dirname + '/test.json',
+      template:__dirname + '/template.html'
+    });
 
     maker.extract(function(error, data){
 
@@ -31,7 +28,12 @@ describe('BookMaker', function(){
 
   it('should convert pages', function(done) {
 
-    var maker = get_maker();
+    var maker = new BookMaker({
+      folder:__dirname + '/pages',
+      output:'silent',
+      datafile:__dirname + '/test.json',
+      template:__dirname + '/template.html'
+    });
 
     maker.convert(function(error, output){
       output.should.equal([
@@ -44,6 +46,37 @@ describe('BookMaker', function(){
       done();
     })
     
+  })
+
+  describe('Merge', function(){
+
+    after(function(){
+      wrench.rmdirSyncRecursive(__dirname + '/testoutput', true);
+    });
+
+    it('should merge folders', function(done) {
+
+      var maker = new BookMaker({
+        folder:__dirname + '/pages',
+        output:__dirname + '/testoutput',
+        template:__dirname + '/apptemplate'
+      });
+
+      maker.merge();
+
+      var files = fs.readdirSync(__dirname + '/testoutput');
+      files.length.should.equal(2);
+
+      var found = {};
+      files.forEach(function(file){
+        found[file] = true;
+      })
+
+      found['site.css'].should.equal(true);
+      found['pages.css'].should.equal(true);
+      done();
+      
+    })
   })
 
 

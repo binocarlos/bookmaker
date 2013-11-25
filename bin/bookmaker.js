@@ -5,14 +5,14 @@
  */
 var version = require(__dirname + '/../package.json').version;
 var program = require("commander");
-var PageMaker = require('../src')
+var BookMaker = require('../src')
 
 
 program
   .option('-f, --folder <path>', 'the folder containing markdown files')
   .option('-o, --output <path>', 'the output HTML file - stdout is default')
   .option('-d, --datafile <path>', 'a JSON file to be used as the base variables')
-  .option('-t, --template <path|name>', 'the template to use')
+  .option('-t, --template <path>', 'the template to use')
   .version(version)
 
 program
@@ -28,6 +28,20 @@ program
     });
 
     maker.convert();
+  })
+
+program
+  .command('merge')
+  .description('copy a template app folder and merge with the data folder')
+  .action(function(){
+
+    var maker = new BookMaker({
+      folder:program.folder,
+      output:program.output,
+      template:program.template
+    });
+
+    maker.merge();
   })
 
 // run help if the command is not known or they just type 'digger'
