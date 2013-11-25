@@ -1,6 +1,6 @@
 {
   "name": "bookmaker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Create books from a folder of markdown files",
   "main": "src/index.js",
   "preferGlobal": "true",
