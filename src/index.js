@@ -190,7 +190,7 @@ BookMaker.prototype.read_data = function(done){
 		return;
 	}
 
-  if(file.charAt(0)!='/'){
+  if(file.charAt(0)!='/' && !file.match(/^\w:\\/i)){
     file = path.normalize(process.cwd() + '/' + file);
   }
 
