@@ -129,8 +129,8 @@ BookMaker.prototype.merge = function(done){
 		process.exit();
 	}
 
-	wrench.rmdirSyncRecursive(this.options.output, true);
-	wrench.mkdirSyncRecursive(this.options.output, 0777);
+	//wrench.rmdirSyncRecursive(this.options.output, true);
+	//wrench.mkdirSyncRecursive(this.options.output, 0777);
 	mergeDirs(this.options.template, this.options.output);
 	mergeDirs(this.options.folder, this.options.output);
 
