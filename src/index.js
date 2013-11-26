@@ -141,6 +141,8 @@ BookMaker.prototype.merge = function(done){
 			fs.unlinkSync(self.options.output + '/' + file);
 		}
 	})
+
+	done && done();
 }
 
 BookMaker.prototype.write_output = function(content, done){
