@@ -110,6 +110,7 @@ BookMaker.prototype.convert = function(done){
 	})
 }
 
+BookMaker.prototype.mergeDirs = mergeDirs;
 
 BookMaker.prototype.merge = function(done){
 	var self = this;
@@ -131,7 +132,11 @@ BookMaker.prototype.merge = function(done){
 
 	//wrench.rmdirSyncRecursive(this.options.output, true);
 	//wrench.mkdirSyncRecursive(this.options.output, 0777);
-	mergeDirs(this.options.template, this.options.output);
+
+	if(this.options.template){
+		mergeDirs(this.options.template, this.options.output);	
+	}
+	
 	mergeDirs(this.options.folder, this.options.output);
 
 	var files = fs.readdirSync(this.options.output);
