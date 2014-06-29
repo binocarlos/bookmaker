@@ -122,7 +122,7 @@ tape('write book', function(t){
 			return
 		}
 
-		var book = require(__dirname + '/testoutput/book.json')
+		var book = JSON.parse(fs.readFileSync(__dirname + '/testoutput/book.json', 'utf8'))
 
 		checkPages(t, book.pages)
 		delete(book.pages)
@@ -143,14 +143,14 @@ tape('write book using the cli', function(t){
 	wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 	wrench.mkdirSyncRecursive(__dirname + '/testoutput')
 
-	cp.exec('node ' + __dirname + '/cli.js -c *.json -p *.md -i *.jpg -s 100x100 ' + __dirname + '/book ' + __dirname + '/testoutput', function(err, stdout, stderr){
+	cp.exec('node ' + __dirname + '/cli.js -c "*.json" -p "*.md" -i "**/*.jpg" -s 100x100 ' + __dirname + '/book ' + __dirname + '/testoutput', function(err, stdout, stderr){
 		if(err){
 			t.fail(err, 'run cli')
 			t.end()
 			return
 		}
 
-		var book = require(__dirname + '/testoutput/book.json')
+		var book = JSON.parse(fs.readFileSync(__dirname + '/testoutput/book.json', 'utf8'))
 
 		checkPages(t, book.pages)
 		delete(book.pages)

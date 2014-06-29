@@ -31,11 +31,16 @@ function usage(){
 
 var BookMaker = require('./index', args)
 var resolve = require('cli-path-resolve')
-var source = resolve(args._[0])
-var dest = resolve(args._[1])
+
+var source = resolve(args._[2])
+var dest = resolve(args._[3])
 
 var book = BookMaker(source)
 
-book.write(dest, args, function(){
-
+book.write(dest, args, function(err){
+	if(err){
+		console.error(err)
+		process.exit(1)
+	}
+	console.log('book built: ' + dest)
 })

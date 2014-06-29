@@ -155,6 +155,7 @@ BookMaker.prototype.resizeImages = function(glob, dest, size, done){
 
 BookMaker.prototype.write = function(dest, config, done){
 	var self = this;
+
 	if(!fs.existsSync(dest)){
 		return done(dest + ' does not exist')
 	}
