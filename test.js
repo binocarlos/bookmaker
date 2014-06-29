@@ -2,6 +2,7 @@ var tape = require('tape')
 var wrench = require('wrench')
 var fs = require('fs')
 var BookMaker = require('./')
+var cp = require('child_process')
 
 function checkConfig(t, config){
 	t.deepEqual(config, {
@@ -117,6 +118,34 @@ tape('write book', function(t){
 	}, function(err){
 		if(err){
 			t.fail(err, 'resize images')
+			t.end()
+			return
+		}
+
+		var book = require(__dirname + '/testoutput/book.json')
+
+		checkPages(t, book.pages)
+		delete(book.pages)
+		checkConfig(t, book)
+
+		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
+		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
+		t.ok(fs.existsSync(__dirname + '/testoutput/subfolder/car.jpg'), 'car exists')
+		
+		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
+		t.end()
+	})
+})
+
+
+tape('write book using the cli', function(t){
+
+	wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
+	wrench.mkdirSyncRecursive(__dirname + '/testoutput')
+
+	cp.exec('node ' + __dirname + '/cli.js -c *.json -p *.md -i *.jpg -s 100x100 ' + __dirname + '/book ' + __dirname + '/testoutput', function(err, stdout, stderr){
+		if(err){
+			t.fail(err, 'run cli')
 			t.end()
 			return
 		}
