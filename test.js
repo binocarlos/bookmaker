@@ -1,6 +1,6 @@
 var tape = require('tape')
 var wrench = require('wrench')
-
+var fs = require('fs')
 var BookMaker = require('./')
 
 function checkConfig(t, config){
@@ -69,13 +69,14 @@ tape('copy files', function(t){
 	wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 	wrench.mkdirSyncRecursive(__dirname + '/testoutput')
 
-	book.copyFiles('*.{jpg,mp3}', function(err){
+	book.copyFiles('*.{jpg,mp3}', __dirname + '/testoutput', function(err){
 		if(err){
 			t.fail(err, 'copy files')
 			t.end()
 			return
 		}
 		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
+		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
 		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 		t.end()
 	})

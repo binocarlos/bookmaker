@@ -108,13 +108,14 @@ BookMaker.prototype.copyFiles = function(glob, dest, done){
 	if(!fs.existsSync(dest)){
 		return done(dest + ' does not exist')
 	}
-	self.fileCopies(glob, function(err, files){
+	self.fileCopies(glob, dest, function(err, files){
 		if(err) return done(err)
 		async.forEach(files, function(file, next){
 			var source = fs.createReadStream(file.source)
 			var dest = fs.createWriteStream(file.dest)
 			dest.on('error', next)
 			dest.on('close', next)
+			source.pipe(dest)
 		}, done)
 	})
 }
