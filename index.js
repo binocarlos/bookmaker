@@ -6,6 +6,7 @@ var util = require('util')
 var globby = require('globby')
 var resize = require('imagemagickresizer')()
 var path = require('path')
+var mkdirp = require('mkdirp')
 
 function BookMaker(source, options){
   EventEmitter.call(this)

@@ -77,15 +77,15 @@ A simplied version of the above:
 var BookMaker = require('bookmaker')
 
 // the base folder for the book content
-var book = BookMaker(__dirname + '/test/book', {
+var book = BookMaker(__dirname + '/test/book')
+
+book.write(__dirname + '/output', {
 	config:'*.json',
 	pages:'*.md',
 	files:'*.{mp3,ogg}',
 	images:'*.{png,jpg,gif}',
 	imageSize:'600x400'
-})
-
-book.write(__dirname + '/output', function(){
+}, function(){
 
 	// the book has been written to __dirname + '/output'
 
