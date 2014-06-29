@@ -11,6 +11,30 @@ $ npm install bookmaker
 
 ## usage
 
+Each markdown file represents a page of the book and can have front-matter.  The values can be used in the book template to show images and play sounds.
+
+An example of a single page .md:
+
+```
+---
+title: Page 2
+image: images/myths2.png
+template: dinosaur
+caption1: Why is the arch a good place to sit in hot weather?
+captionsound1: sounds/dino-page2-caption1.mp3
+caption2: Why does Pan think he can see Hoofus in the book?
+captionsound2: sounds/dino-page2-caption2.mp3
+---
+
+The arch was part of a fort and it is a good spot to sit down in the summer out of the sun.
+
+In the book they see a town.
+
+Pan sees the back of a goat next to a cart. "Look, that might be Hoofus," he yells, "I can see his horns too."
+```
+
+Take a folder of these with some images and sounds and you can use the following code:
+
 ```
 var BookMaker = require('bookmaker')
 
@@ -32,46 +56,46 @@ book.getPages('*.md', function(err, pages){
 
 		// page has .body .html and .attributes
 
-		if(page.attributes.image){
-			// copy image logic here
-
-		}
 	})
 })
 
-// a glob pattern for what files to pluck
-book.processFiles('*.{png,jpg,gif,mp3,ogg}', function(filepath, next){
+// a combination of getConfig and getPages
+book.load('*.json', '*.md', function(err, book){
+	// book has a 'pages' property
 
-	// filepath is relative to the book root
+	// we can write the .json to the dest folder
+})
 
-	// here we can copy / resize or otherwise ignore the file
-	// calling next(error) or next() will progress the glob
+// a glob pattern for the files to copy
+book.copyFiles('*.{mp3,ogg}', targetFolder, function(err){
+	// the source files have been copied to the target dir
+})
 
-}, function(err){
-
-	// all files in the glob have been processed
-
+// a glob pattern for the images to resize
+book.resizeImages('*.{png,jpg,gif}', '600x400', targetFolder, function(err){
+	// the source images have been resized and copied to the target dir
 })
 ```
 
-An example of a single page .md:
+A simplied version of the above:
 
-```
----
-title: Page 2
-image: images/myths2.png
-template: dinosaur
-caption1: Why is the arch a good place to sit in hot weather?
-captionsound1: sounds/dino-page2-caption1.mp3
-caption2: Why does Pan think he can see Hoofus in the book?
-captionsound2: sounds/dino-page2-caption2.mp3
----
+```js
+var BookMaker = require('bookmaker')
 
-The arch was part of a fort and it is a good spot to sit down in the summer out of the sun.
+// the base folder for the book content
+var book = BookMaker(__dirname + '/test/book', {
+	config:'*.json',
+	pages:'*.md',
+	files:'*.{mp3,ogg}',
+	images:'*.{png,jpg,gif}',
+	imageSize:'600x400'
+})
 
-In the book they see a town.
+book.write(__dirname + '/output', function(){
 
-Pan sees the back of a goat next to a cart. "Look, that might be Hoofus," he yells, "I can see his horns too."
+	// the book has been written to __dirname + '/output'
+
+})
 ```
 
 ## api
@@ -100,7 +124,7 @@ book.getConfig('{main,theme}.json', function(err, config){
 
 ### `book.getPages(glob, callback(err, pages){})`
 
-Load an array of page objects that are the result of processing the markdown files found in the glob.
+Process each markdown file found in the glob and return an array of the JSON objects.
 
 ### `book.processFiles(glob, process(filepath, next){}, done(error){})`
 
