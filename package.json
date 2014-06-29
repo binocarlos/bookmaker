@@ -8,7 +8,8 @@
     "bookmaker": "cli.js"
   },
   "dependencies": {
-    "globby": "^0.1.1"
+    "globby": "^0.1.1",
+    "async": "^0.9.0"
   },
   "devDependencies": {
     "tape": "^2.13.3"
