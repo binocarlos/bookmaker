@@ -13,7 +13,8 @@
     "markdown-parse": "^0.2.1",
     "imagemagickresizer": "^1.0.0",
     "mkdirp": "^0.5.0",
-    "minimist": "^0.2.0"
+    "minimist": "^0.2.0",
+    "cli-path-resolve": "0.0.2"
   },
   "devDependencies": {
     "tape": "^2.13.3",

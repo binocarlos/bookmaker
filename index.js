@@ -159,6 +159,14 @@ BookMaker.prototype.write = function(dest, config, done){
 		return done(dest + ' does not exist')
 	}
 
+	if(!config.config){
+		return done('config setting does not exist')
+	}
+
+	if(!config.pages){
+		return done('pages setting does not exist')
+	}
+
 	var bookjson = config.bookjson || 'book.json'
 
 	async.parallel({

@@ -30,13 +30,12 @@ function usage(){
 }
 
 var BookMaker = require('./index', args)
-var fs = require('fs')
-
-var source = args._[0]
-var dest = args._[1]
+var resolve = require('cli-path-resolve')
+var source = resolve(args._[0])
+var dest = resolve(args._[1])
 
 var book = BookMaker(source)
 
-book.write(dest, function(){
+book.write(dest, args, function(){
 
 })
