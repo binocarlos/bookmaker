@@ -31,6 +31,7 @@ tape('load the pages', function(t){
 		}
 		t.equal(pages.length, 3, 'pages.length')
 		t.equal(pages[0].attributes.options, 'A', 'the attr from page1')
+		t.equal(pages[0].html, '<p>This is page 1</p>', 'markdown parsed')
 		t.end()
 	})
 })
