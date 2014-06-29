@@ -29,7 +29,7 @@ It will be converted to HTML
 
 Take a folder of these with some images and sounds and you can use the following code:
 
-```
+```js
 var BookMaker = require('bookmaker')
 
 // the base folder for the book content
