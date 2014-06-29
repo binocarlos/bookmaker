@@ -77,11 +77,10 @@ tape('copy files', function(t){
 		}
 		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
 		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
-		//wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
+		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 		t.end()
 	})
 })
-/*
 
 tape('resize images', function(t){
 	var book = BookMaker(__dirname + '/book')
@@ -100,4 +99,4 @@ tape('resize images', function(t){
 		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 		t.end()
 	})
-})*/
+})

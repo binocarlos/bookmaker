@@ -104,6 +104,10 @@ BookMaker.prototype.loadConfigs = function(glob, done){
 	})
 }
 
+BookMaker.prototype.ensureFolder = function(filepath, done){
+	var folder = path.dirname(filepath)
+	mkdirp(folder, done)
+}
 
 BookMaker.prototype.copyFiles = function(glob, dest, done){
 	var self = this;
@@ -113,11 +117,15 @@ BookMaker.prototype.copyFiles = function(glob, dest, done){
 	self.fileCopies(glob, dest, function(err, files){
 		if(err) return done(err)
 		async.forEach(files, function(file, next){
-			var source = fs.createReadStream(file.source)
-			var dest = fs.createWriteStream(file.dest)
-			dest.on('error', next)
-			dest.on('close', next)
-			source.pipe(dest)
+			self.ensureFolder(file.dest, function(){
+				if(err) return next(err)
+				var source = fs.createReadStream(file.source)
+				var dest = fs.createWriteStream(file.dest)
+				dest.on('error', next)
+				dest.on('close', next)
+				source.pipe(dest)	
+			})
+			
 		}, done)
 	})
 }
@@ -137,9 +145,10 @@ BookMaker.prototype.resizeImages = function(glob, dest, size, done){
 	self.fileCopies(glob, dest, function(err, files){
 		if(err) return done(err)
 		async.forEach(files, function(file, next){
-
-			resize.image(file.source, file.dest, size, next)
-
+			self.ensureFolder(file.dest, function(){
+				if(err) return next(err)
+				resize.image(file.source, file.dest, size, next)
+			})
 		}, done)
 	})
 }
