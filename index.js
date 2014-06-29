@@ -4,6 +4,7 @@ var fs = require('fs')
 var async = require('async')
 var util = require('util')
 var globby = require('globby')
+var resizer = require('imagemagickresizer')
 var path = require('path')
 
 function BookMaker(source, options){
