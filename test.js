@@ -55,8 +55,10 @@ tape('load', function(t){
 			t.end()
 			return
 		}
-		checkConfig(t, config)
 		checkPages(t, book.pages)
+		delete(book.pages)
+		checkConfig(t, book)
+		
 		t.end()
 	})
 })

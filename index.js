@@ -37,6 +37,25 @@ BookMaker.prototype.files = function(glob, done){
 	})
 }
 
+
+BookMaker.prototype.load = function(configGlob, pagesGlob, done){
+	var self = this;
+
+	async.parallel({
+		config:function(next){
+			self.loadConfigs(configGlob, next)
+		},
+		pages:function(next){
+			self.loadPages(pagesGlob, next)
+		}
+	}, function(err, result){
+		if(err) return done(err)
+		var book = result.config
+		book.pages = result.pages
+		done(null, book)
+	})
+}
+
 BookMaker.prototype.loadPages = function(glob, done){
 	var self = this;
 	self.files(glob, function(err, files){
