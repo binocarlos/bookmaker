@@ -8,11 +8,10 @@
     "bookmaker": "cli.js"
   },
   "dependencies": {
-    
+    "globby": "^0.1.1"
   },
   "devDependencies": {
-    "mocha": "~1.12.0",
-    "should": "~1.2.2"
+    "tape": "^2.13.3"
   },
   "scripts": {
     "test": "make test"
