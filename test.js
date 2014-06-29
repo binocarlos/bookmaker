@@ -18,3 +18,19 @@ tape('load the configs', function(t){
 		t.end()
 	})
 })
+
+
+tape('load the pages', function(t){
+	var book = BookMaker(__dirname + '/book')
+
+	book.loadPages('*.md', function(err, pages){
+		if(err){
+			t.fail(err, 'load pages')
+			t.end()
+			return
+		}
+		t.equal(pages.length, 3, 'pages.length')
+		t.equal(pages[0].attributes.options, 'A', 'the attr from page1')
+		t.end()
+	})
+})
