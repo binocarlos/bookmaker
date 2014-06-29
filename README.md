@@ -132,6 +132,31 @@ Copy a glob of files from the book folder to the targetFolder
 
 Copy and resize the images in the glob.  Size can be a string: '100x100' or an object with 'width' and 'height' properties.
 
+## cli
+
+You can also install bookmaker globally and use it as a command line script
+
+```
+$ npm install bookmaker -g
+$ bookmaker --help
+```
+
+```
+usage: bookmaker [options] sourcefolder destfolder
+
+options:
+
+  --config, -c - a glob for the config files
+  --pages, -p - a glob for the .md pages
+  --files, -f - a glob for files to copy
+  --images, -i - a glob for images to resize
+  --imagesize, -s - the size for resized images
+```
+
+```
+$ bookmaker --config "*.json" --pages "*.md" --images "*.jpg" --imagesize 600x400 ./input ./output
+```
+
 ## licence
 MIT
 

@@ -29,6 +29,11 @@ function usage(){
 	console.log(usage.join("\n"))
 }
 
+if(args.help){
+	usage()
+	process.exit()
+}
+
 var BookMaker = require('./index', args)
 var resolve = require('cli-path-resolve')
 
