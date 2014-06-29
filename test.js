@@ -77,6 +77,7 @@ tape('copy files', function(t){
 		}
 		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
 		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
+		t.ok(fs.existsSync(__dirname + '/testoutput/subfolder/car.jpg'), 'car exists')
 		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 		t.end()
 	})
@@ -96,6 +97,41 @@ tape('resize images', function(t){
 		}
 		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
 		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
+		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
+		t.end()
+	})
+})
+
+
+tape('write book', function(t){
+	var book = BookMaker(__dirname + '/book')
+
+	wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
+	wrench.mkdirSyncRecursive(__dirname + '/testoutput')
+
+	book.write(__dirname + '/testoutput', {
+		config:'*.json',
+		pages:'*.md',
+		images:'**/*.{png,jpg}',
+		imageSize:'600x400'
+	}, function(err){
+		if(err){
+			t.fail(err, 'resize images')
+			t.end()
+			return
+		}
+
+		var book = require(__dirname + '/testoutput/book.json')
+
+		checkPages(t, book.pages)
+		delete(book.pages)
+		checkConfig(t, book)
+
+		t.equal(book.pages.length, 3, '3 pages')
+		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
+		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
+		t.ok(fs.existsSync(__dirname + '/testoutput/subfolder/car.jpg'), 'car exists')
+		
 		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 		t.end()
 	})
