@@ -1,4 +1,6 @@
 var tape = require('tape')
+var wrench = require('wrench')
+
 var BookMaker = require('./')
 
 tape('load the configs', function(t){

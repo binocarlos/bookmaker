@@ -13,7 +13,8 @@
     "markdown-parse": "^0.2.1"
   },
   "devDependencies": {
-    "tape": "^2.13.3"
+    "tape": "^2.13.3",
+    "wrench": "^1.5.8"
   },
   "scripts": {
     "test": "make test"
