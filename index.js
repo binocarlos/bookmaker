@@ -4,7 +4,7 @@ var fs = require('fs')
 var async = require('async')
 var util = require('util')
 var globby = require('globby')
-var resizer = require('imagemagickresizer')
+var resize = require('imagemagickresizer')()
 var path = require('path')
 
 function BookMaker(source, options){
@@ -117,6 +117,28 @@ BookMaker.prototype.copyFiles = function(glob, dest, done){
 			dest.on('error', next)
 			dest.on('close', next)
 			source.pipe(dest)
+		}, done)
+	})
+}
+
+BookMaker.prototype.resizeImages = function(glob, dest, size, done){
+	var self = this;
+	if(!fs.existsSync(dest)){
+		return done(dest + ' does not exist')
+	}
+	if(typeof(size)==='string'){
+		var parts = size.replace(/\s/g, '').split('x')
+		size = {
+			width:parts[0],
+			height:parts[1]
+		}
+	}
+	self.fileCopies(glob, dest, function(err, files){
+		if(err) return done(err)
+		async.forEach(files, function(file, next){
+
+			resize.image(file.source, file.dest, size, next)
+
 		}, done)
 	})
 }
