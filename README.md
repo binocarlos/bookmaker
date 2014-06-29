@@ -18,19 +18,13 @@ An example of a single page .md:
 ```
 ---
 title: Page 2
-image: images/myths2.png
+image: images/balloons.png
 template: dinosaur
-caption1: Why is the arch a good place to sit in hot weather?
-captionsound1: sounds/dino-page2-caption1.mp3
-caption2: Why does Pan think he can see Hoofus in the book?
-captionsound2: sounds/dino-page2-caption2.mp3
 ---
 
-The arch was part of a fort and it is a good spot to sit down in the summer out of the sun.
+This is some markdown
 
-In the book they see a town.
-
-Pan sees the back of a goat next to a cart. "Look, that might be Hoofus," he yells, "I can see his horns too."
+It will be converted to HTML
 ```
 
 Take a folder of these with some images and sounds and you can use the following code:
@@ -42,14 +36,14 @@ var BookMaker = require('bookmaker')
 var book = BookMaker(__dirname + '/test/book')
 
 // a glob pattern for what .json files to merge into the top level book config
-book.getConfig('*.json', function(err, config){
+book.loadConfig('*.json', function(err, config){
 
 	// the config is an object containing a merge of the *.json files
 
 })
 
 // a glob pattern for what markdown files to load for pages
-book.getPages('*.md', function(err, pages){
+book.loadPages('*.md', function(err, pages){
 
 	// pages is an array of objects each representing a page
 	pages.forEach(function(page){

@@ -5,16 +5,10 @@
   "main": "src/index.js",
   "preferGlobal": "true",
   "bin": {
-    "bookmaker": "bin/bookmaker.js"
+    "bookmaker": "cli.js"
   },
   "dependencies": {
-    "pagemaker": "~0.1.1",
-    "mustache": "~0.7.3",
-    "async": "~0.2.9",
-    "should": "~2.1.0",
-    "wrench": "~1.5.4",
-    "commander": "~2.1.0",
-    "node-fs": "~0.1.7"
+    
   },
   "devDependencies": {
     "mocha": "~1.12.0",
