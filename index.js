@@ -153,6 +153,40 @@ BookMaker.prototype.resizeImages = function(glob, dest, size, done){
 	})
 }
 
+BookMaker.prototype.write = function(dest, config, done){
+	var self = this;
+	if(!fs.existsSync(dest)){
+		return done(dest + ' does not exist')
+	}
+
+	var bookjson = config.bookjson || 'book.json'
+
+	async.parallel({
+		book:function(next){
+			self.load(config.config, config.pages, function(err, book){
+				fs.writeFile(dest + '/' + bookjson, JSON.stringify(book, null, 4), 'utf8', next)
+			})
+		},
+		files:function(next){
+			if(!config.files){
+				return next()
+			}
+			self.copyFiles(config.files, dest, next)
+		},
+		images:function(next){
+			if(!config.images){
+				return next()
+			}
+			if(config.imageSize){
+				self.resizeImages(config.images, dest, config.imageSize, next)
+			}
+			else{
+				self.copyFiles(config.images, dest, next)
+			}
+		}
+	}, done)
+}
+
 module.exports = function(source, options){
   return new BookMaker(source, options)
 }

@@ -127,7 +127,6 @@ tape('write book', function(t){
 		delete(book.pages)
 		checkConfig(t, book)
 
-		t.equal(book.pages.length, 3, '3 pages')
 		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
 		t.ok(fs.existsSync(__dirname + '/testoutput/car.jpg'), 'car exists')
 		t.ok(fs.existsSync(__dirname + '/testoutput/subfolder/car.jpg'), 'car exists')
