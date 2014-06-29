@@ -98,7 +98,7 @@ book.write(__dirname + '/output', function(){
 
 Create a new book object passing the folder root for where the markdown pages and other files live
 
-### `book.getConfig(glob, callback(err, config){})`
+### `book.loadConfig(glob, callback(err, config){})`
 
 Load an object that is the result of merging the files found in the passed file glob.
 
@@ -116,17 +116,21 @@ book.getConfig('{main,theme}.json', function(err, config){
 })
 ```
 
-### `book.getPages(glob, callback(err, pages){})`
+### `book.loadPages(glob, callback(err, pages){})`
 
 Process each markdown file found in the glob and return an array of the JSON objects.
 
-### `book.processFiles(glob, process(filepath, next){}, done(error){})`
+### `book.load(configGlob, pageGlob, callback(err, book){})`
 
-Process the media / general files found in the source folder.
+A combo of loadConfig and loadPages that returns a single object that is the config with a 'pages' property
 
-Pass a process function that accepts the filepath (relative to the book source) and a next function.
+### `book.copyFiles(glob, targetFolder, done(error){})`
 
-Calling the next function with an error as the first argument - halts the processing 
+Copy a glob of files from the book folder to the targetFolder
+
+### `book.resizeImages(glob, targetFolder, size, done(error){})`
+
+Copy and resize the images in the glob.  Size can be a string: '100x100' or an object with 'width' and 'height' properties.
 
 ## licence
 MIT
