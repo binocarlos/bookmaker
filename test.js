@@ -3,6 +3,20 @@ var wrench = require('wrench')
 
 var BookMaker = require('./')
 
+function checkConfig(t, config){
+	t.deepEqual(config, {
+		test:'yes',
+		fruit:'apples',
+		color:'red'
+	})
+}
+
+function checkPages(t, pages){
+	t.equal(pages.length, 3, 'pages.length')
+	t.equal(pages[0].attributes.option, 'A', 'the attr from page1')
+	t.equal(pages[0].html, "<p>This is page 1</p>\n", 'markdown parsed')
+}
+
 tape('load the configs', function(t){
 	var book = BookMaker(__dirname + '/book')
 
@@ -12,11 +26,7 @@ tape('load the configs', function(t){
 			t.end()
 			return
 		}
-		t.deepEqual(config, {
-			test:'yes',
-			fruit:'apples',
-			color:'red'
-		})
+		checkConfig(t, config)
 		t.end()
 	})
 })
@@ -31,9 +41,40 @@ tape('load the pages', function(t){
 			t.end()
 			return
 		}
-		t.equal(pages.length, 3, 'pages.length')
-		t.equal(pages[0].attributes.option, 'A', 'the attr from page1')
-		t.equal(pages[0].html, "<p>This is page 1</p>\n", 'markdown parsed')
+		checkPages(t, pages)
+		t.end()
+	})
+})
+
+
+tape('load', function(t){
+	var book = BookMaker(__dirname + '/book')
+	book.load('*.json', '*.md', function(err, book){
+		if(err){
+			t.fail(err, 'load pages')
+			t.end()
+			return
+		}
+		checkConfig(t, config)
+		checkPages(t, book.pages)
+		t.end()
+	})
+})
+
+tape('copy files', function(t){
+	var book = BookMaker(__dirname + '/book')
+
+	wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
+	wrench.mkdirSyncRecursive(__dirname + '/testoutput')
+
+	book.copyFiles('*.{jpg,mp3}', function(err){
+		if(err){
+			t.fail(err, 'copy files')
+			t.end()
+			return
+		}
+		t.ok(fs.existsSync(__dirname + '/testoutput/balloons.jpg'), 'balloons exists')
+		wrench.rmdirSyncRecursive(__dirname + '/testoutput', true)
 		t.end()
 	})
 })
