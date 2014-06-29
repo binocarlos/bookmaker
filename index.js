@@ -16,6 +16,7 @@ util.inherits(BookMaker, EventEmitter)
 
 // an array of relative glob results
 BookMaker.prototype.globs = function(glob, done){
+	var self = this;
 	if(typeof(glob)==='string'){
 		glob = [glob]
 	}
@@ -41,7 +42,7 @@ BookMaker.prototype.loadPages = function(glob, done){
 	self.files(glob, function(err, files){
 
 		async.map(files, function(file, nextFile){
-			fs.readFile(file, 'utf8', function(err, markdown){
+			fs.readFile(file, 'utf8', function(err, content){
 				if(err) return nextFile(err)
 				parser(content, nextFile)
 			})
