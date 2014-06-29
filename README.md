@@ -66,7 +66,7 @@ book.copyFiles('*.{mp3,ogg}', targetFolder, function(err){
 })
 
 // a glob pattern for the images to resize
-book.resizeImages('*.{png,jpg,gif}', '600x400', targetFolder, function(err){
+book.resizeImages('*.{png,jpg,gif}', targetFolder, '600x400', function(err){
 	// the source images have been resized and copied to the target dir
 })
 ```
